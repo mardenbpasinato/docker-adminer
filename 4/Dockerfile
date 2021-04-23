@@ -1,9 +1,16 @@
 FROM php:7.4-alpine
 
-RUN	echo "upload_max_filesize = 128M" >> /usr/local/etc/php/conf.d/0-upload_large_dumps.ini \
-&&	echo "post_max_size = 128M" >> /usr/local/etc/php/conf.d/0-upload_large_dumps.ini \
-&&	echo "memory_limit = 1G" >> /usr/local/etc/php/conf.d/0-upload_large_dumps.ini \
-&&	echo "max_execution_time = 600" >> /usr/local/etc/php/conf.d/0-upload_large_dumps.ini \
+# Useful tools for debugging and importing dumps 
+RUN apk add --no-cache bash \
+&& apk add --no-cache pv \
+&& apk add --no-cache htop \
+&& apk add --no-cache mysql-client
+
+# Increasing limits for file upload
+RUN	echo "upload_max_filesize = 500M" >> /usr/local/etc/php/conf.d/0-upload_large_dumps.ini \
+&&	echo "post_max_size = 500M" >> /usr/local/etc/php/conf.d/0-upload_large_dumps.ini \
+&&	echo "memory_limit = 2G" >> /usr/local/etc/php/conf.d/0-upload_large_dumps.ini \
+&&	echo "max_execution_time = 18000" >> /usr/local/etc/php/conf.d/0-upload_large_dumps.ini \
 &&	echo "max_input_vars = 5000" >> /usr/local/etc/php/conf.d/0-upload_large_dumps.ini
 
 STOPSIGNAL SIGINT
